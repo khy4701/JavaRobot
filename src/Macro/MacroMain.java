@@ -1,3 +1,4 @@
+// 마우스를 움직이면 그대로 따라 움직이는 매크로.
 package Macro;
 
 import java.awt.MouseInfo;
