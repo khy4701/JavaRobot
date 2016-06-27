@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane prefHeight="166.0" prefWidth="444.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="MacroFullVersion.ScreenControl">
+   <children>
+      <Button fx:id="btnStart" layoutX="32.0" layoutY="42.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="121.0" text="Start" />
+      <Button fx:id="btnStop" layoutX="309.0" layoutY="42.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="121.0" text="Stop" />
+      <Button fx:id="btnPlay" layoutX="168.0" layoutY="42.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="121.0" text="Play" />
+      <Label layoutX="36.0" layoutY="14.0" text="Macro App(Ver 0.1)" />
+      <TextField fx:id="txtStr" layoutX="32.0" layoutY="90.0" prefHeight="63.0" prefWidth="397.0" />
+   </children>
+</AnchorPane>
