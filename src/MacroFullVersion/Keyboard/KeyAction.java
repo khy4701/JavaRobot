@@ -24,6 +24,7 @@ public class KeyAction {
 	
 		nonmodify_key = -1;
 		
+		// 일반 문자 일 경우 ( A~Z, 0~9 , Escape, Caps Lock, Enter, .. )
 		if (code_split[0].equals("NonModifier")) {
 			// Non_Modifier
 			/*
@@ -45,7 +46,7 @@ public class KeyAction {
 			}
 
 			
-			
+		// 수식자(Modifier : Alt, Ctrl, Shift) 일 경우	
 		} else if (code_split[0].equals("Modifier")) {
 
 			// Modifier.
@@ -54,12 +55,11 @@ public class KeyAction {
 			 * [ctrl+A] : Modifier Ctrl A [Ctrl+Shift+A] : Modifier Ctrl+Shift A
 			 * 
 			 */
-			
-			nonmodify_key = -1;
 			modify_key = -1;
-			
-			//System.out.println("Play Modifier :" + code_split[0] + code_split[1] + code_split[2]);
-					
+			nonmodify_key = -1;		
+								
+			// StringToCode_Modify()에서 맞는 String이 있으면 코드 값
+			// 그렇지 않으면 -1 그대로 유지함
 			modify_key = StringToCode_Modify(code_split[1]);
 			
 			if( modify_key != -1)
@@ -78,24 +78,13 @@ public class KeyAction {
 					robot.keyPress(nonmodify_key);
 					PrintTest.PrintSystemOrder("Pressed: " + code_split[2]);
 					robot.delay(200);
-				}
-				
+				}				
 			}
-			
-//			if( modify_key != -1)
-//			{
-//				robot.keyRelease(modify_key);
-//				PrintTest.PrintSystemOrder("Released: " + code_split[1]);
-//			}
-//			
-//			if( nonmodify_key != -1)				
-//			{
-//				robot.keyRelease(nonmodify_key);
-//				PrintTest.PrintSystemOrder("Released: " + code_split[2]);
-//			}
 		}
 	}
 	
+	// 일반키(NonModifier)를 JNativeHook 클래스에서 사용하는 String에서 
+	// Robot클래스에서 사용하는 Key(Int) 값으로 변경하는 함수.
 	public int StringToCode_NonModify(String codeStr)
 	{
 		int code = -1;
@@ -121,7 +110,8 @@ public class KeyAction {
 		
 		return code;
 	}
-	
+	// 수식키(Modifier)를 JNativeHook 클래스에서 사용하는 String에서 
+	// Robot클래스에서 사용하는 Key(Int) 값으로 변경하는 함수.	
 	public int StringToCode_Modify(String coderStr)
 	{
 		int code = -1;
@@ -136,11 +126,13 @@ public class KeyAction {
 		return code;
 	}
 	
+	// Key를 떼었을 때 발생하는 함수 
+	// 위의 KeyPressed를 선택한 것들을 Release 시키기 위해서 만든 함수
 	public void KeyReleased(String str)
-	{
-		
+	{		
 		String []split_str = str.split(" ");
 		
+		// Modifier 형태 Release
 		if( (split_str[0].equals("Left") || split_str[0].equals("Rigth")))
 		{
 			
@@ -150,6 +142,8 @@ public class KeyAction {
 			PrintTest.PrintSystemOrder("Released: " + split_str[1]);
 
 		}
+		
+		// NonModifier 형태 Release
 		else
 		{			
 			nonmodify_key = StringToCode_NonModify(split_str[0]);
@@ -158,9 +152,6 @@ public class KeyAction {
 			
 			PrintTest.PrintSystemOrder("Released: " + split_str[0]);
 		}
-		
-		
-		
 	}
 	
 }

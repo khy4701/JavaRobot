@@ -58,20 +58,23 @@ public class ScreenControl implements Initializable {
 
 	}
 
+	// Start Button
 	public void ActionStart() {
 		btnStart.setDisable(true);
 		btnStop.setDisable(false);
 		btnPlay.setDisable(true);
 
+		// Pattern List 초기화
 		if (!arrayList.isEmpty()) {
 			arrayList.clear();
 			arrayList = new ArrayList<EventHandle>();
 		}
 
-
 		System.out.println("Press Start.");
 
+		// 후킹 Screen Register
 		try {
+			
 			GlobalScreen.registerNativeHook();
 
 		} catch (NativeHookException e) {
@@ -79,19 +82,21 @@ public class ScreenControl implements Initializable {
 			e.printStackTrace();
 		}
 
+		// Register Keyboard Listener
 		k_listen = new KeyboardListen(arrayList);
 		GlobalScreen.addNativeKeyListener(k_listen);
 
+		// Register Mouse Listener
+		// Listener 의 MouseMove는 따로 스레드로 돌렸음..( 속도 때문이랄까.. ?)
 		m_listen = new MouseListen(arrayList);
 		GlobalScreen.addNativeMouseListener(m_listen);
 		GlobalScreen.addNativeMouseMotionListener(m_listen);
 		m_listen.MoveListenStart();
 		
-	
-
 	}
 
 	public void ActionStop() {
+		
 		btnStart.setDisable(false);
 		btnStop.setDisable(true);
 		btnPlay.setDisable(false);
@@ -121,11 +126,18 @@ public class ScreenControl implements Initializable {
 		synchronized (arrayList) {
 			try {
 				robot = new Robot();
-				k_action = new KeyAction(robot);
+				
+				// K_Lister에서 등록한 ArrayList의 값을 robot 클래스로 동작하기 위한 클래스 초기화
+				k_action = new KeyAction(robot);  
 
 				boolean drag_status = false;
+				
+				// ArrayList<EventHandle> arrayList
+				// arrayList[i] : event_name, position 
+				//              or event_name, keyString 으로 구성.
 				for (EventHandle i : arrayList) {
 					
+					// event_name == mouseClicked 
 					if (i.getEventName().equals("MouseClicked")) {
 						Point pos = i.getPosition();
 						robot.mouseMove((int) pos.getX(), (int) pos.getY());
@@ -133,11 +145,12 @@ public class ScreenControl implements Initializable {
 						robot.mouseRelease(InputEvent.BUTTON1_MASK);
 
 						
+					// event_name == MouseMoved 	
 					} else if (i.getEventName().equals("MouseMoved")) {
 						Point pos = i.getPosition();
 						robot.mouseMove((int) pos.getX(), (int) pos.getY());
 						
-						
+				    // event_name == MouseDragged
 					} else if (i.getEventName().equals("MouseDragged"))
 					{
 						Point pos = i.getPosition();
@@ -148,18 +161,20 @@ public class ScreenControl implements Initializable {
 							drag_status = true;
 						}
 						robot.mouseMove((int) pos.getX(), (int) pos.getY());
-						
+					
+					// event_name == MouseReleased
 					} else if (i.getEventName().equals("MouseReleased"))
 					{
 						drag_status =false;
 						robot.mouseRelease(InputEvent.BUTTON1_MASK);						
-						
+					
+					// event_name == KeyPressed
 					} else if (i.getEventName().equals("KeyPressed")) {
 
 						k_action.KeyPressed( i.getPressKeyStr());
 
 						
-						
+					// event_name == KeyReleased	
 					} else if (i.getEventName().equals("KeyReleased")) {
 
 						k_action.KeyReleased(i.getPressKeyStr());

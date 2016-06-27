@@ -94,11 +94,13 @@ public class MouseListen implements NativeMouseInputListener{
 	
 	public void MoveListenStart()
 	{
+		// Mouse의 Move를 감지하기 위한 스레드 따로 생성(아마 속도 때문이였을..)
 		m_th.start();		
 	}
 	
 	public void MoveListenStop()
 	{
+		// MouseMoveListen의 Wait()의 예외처리 호출.
 		m_th.interrupt();
 	}
 	
